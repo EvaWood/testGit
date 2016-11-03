@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/mvc 
+    http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+ 
+  	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">  
+        <property name="messageConverters">  
+            <list>  
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter">  
+                    <property name="supportedMediaTypes">  
+                        <list>  
+                            <value>text/html;charset=UTF-8</value>  
+                        </list>  
+                    </property>  
+                </bean>  
+            </list>  
+        </property>  
+    </bean>  
+    
+    <!-- 默认的注解映射的支持 -->
+    <mvc:annotation-driven />
+    <!--启用自动扫描  -->
+    <context:component-scan base-package="com.jinda.*;" />
+	<context:property-placeholder location="classpath:config/*.properties"/>
+    
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/view/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+    
+	<mvc:resources mapping="/static/**" location="/WEB-INF/static/"/>
+	
+<!-- 	<mvc:view-controller path="/" view-name="home/login"/> -->
+	<import resource="dbconfig.xml"/>
+	
+	<!-- c3p0连接池配置 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+         <!-- 用户名-->
+         <property name="user" value="${dbuser}"/>
+         <!-- 用户密码-->
+         <property name="password" value="${dbpasswd}"/>
+         <property name="driverClass" value="${dbdriver}"/>
+         <property name="jdbcUrl" value="${dburl}"/>
+         <property name="initialPoolSize" value="${initialPoolSize}"/>
+         <property name="maxIdleTime" value="${maxIdleTime}"/>
+         <property name="maxPoolSize" value="${maxPoolSize}"/>
+         <property name="minPoolSize" value="${minPoolSize}"/>
+    </bean>	 
+	
+</beans>
